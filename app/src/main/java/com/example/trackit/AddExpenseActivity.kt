@@ -11,6 +11,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
+import android.os.Environment
+import androidx.core.content.FileProvider
+import java.io.File
+
 
 class AddExpenseActivity : AppCompatActivity() {
 
@@ -23,10 +27,11 @@ class AddExpenseActivity : AppCompatActivity() {
     private lateinit var btnPickImage: Button
     private lateinit var btnSaveExpense: Button
     private lateinit var imgPreview: ImageView
-
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private var imageUri: Uri? = null
     private lateinit var dbHelper: ExpenseDatabaseHelper
     private lateinit var categoryHelper: ExpenseDatabaseHelper
-    private var imageUri: Uri? = null
+
 
     companion object {
         const val IMAGE_PICK_CODE = 1001
@@ -108,6 +113,21 @@ class AddExpenseActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to save expense", Toast.LENGTH_SHORT).show()
             }
         }
+
+        btnPickImage.setOnClickListener {
+            val photoFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "photo_${System.currentTimeMillis()}.jpg")
+            imageUri = FileProvider.getUriForFile(this, "${packageName}.provider", photoFile)
+
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            }
+
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+
 
     }
 

@@ -4,42 +4,33 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.util.*
+
 
 class ExpenseDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, "trackit.db", null, 2) {
 
-    companion object {
-        private const val TABLE_EXPENSES = "expenses"
-        private const val COLUMN_ID = "id"
-        private const val COLUMN_AMOUNT = "amount"
-        private const val COLUMN_DATE = "date"
-        private const val COLUMN_DESCRIPTION = "description"
-        private const val COLUMN_CATEGORY = "category"
-        private const val COLUMN_IMAGE_URI = "image_uri"
-    }
-
     override fun onCreate(db: SQLiteDatabase) {
         val createExpensesTable = """
-        CREATE TABLE IF NOT EXISTS expenses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            amount REAL NOT NULL,
-            date TEXT NOT NULL,
-            description TEXT,
-            category TEXT NOT NULL,
-            image_uri TEXT
-        )
-    """.trimIndent()
+            CREATE TABLE IF NOT EXISTS expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                amount REAL NOT NULL,
+                date TEXT NOT NULL,
+                description TEXT,
+                category TEXT NOT NULL,
+                image_uri TEXT
+            )
+        """.trimIndent()
 
         val createCategoriesTable = """
-        CREATE TABLE IF NOT EXISTS categories (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL UNIQUE
-        )
-    """.trimIndent()
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE
+            )
+        """.trimIndent()
 
         db.execSQL(createExpensesTable)
         db.execSQL(createCategoriesTable)
-
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -48,17 +39,22 @@ class ExpenseDatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    fun insertExpense(amount: Double, date: String, description: String, category: String, imageUri: String?): Boolean {
+    fun insertExpense(
+        amount: Double,
+        date: String,
+        description: String,
+        category: String,
+        imageUri: String?
+    ): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_AMOUNT, amount)
-            put(COLUMN_DATE, date)
-            put(COLUMN_DESCRIPTION, description)
-            put(COLUMN_CATEGORY, category)
-            put(COLUMN_IMAGE_URI, imageUri)
+            put("amount", amount)
+            put("date", date)
+            put("description", description)
+            put("category", category)
+            put("image_uri", imageUri)
         }
-
-        val result = db.insert(TABLE_EXPENSES, null, values)
+        val result = db.insert("expenses", null, values)
         db.close()
         return result != -1L
     }
@@ -73,7 +69,6 @@ class ExpenseDatabaseHelper(context: Context) :
         return result != -1L
     }
 
-
     fun getAllCategories(): List<String> {
         val categories = mutableListOf<String>()
         val db = readableDatabase
@@ -87,13 +82,14 @@ class ExpenseDatabaseHelper(context: Context) :
     }
 
     fun getExpensesByDateRange(start: String, end: String): List<Expense> {
-        val expenses = mutableListOf<Expense>()
+        val list = mutableListOf<Expense>()
         val db = readableDatabase
-        val query = "SELECT amount, date, description, category, image_uri FROM expenses WHERE date BETWEEN ? AND ?"
-        val cursor = db.rawQuery(query, arrayOf(start, end))
-
+        val cursor = db.rawQuery(
+            "SELECT amount, date, description, category, image_uri FROM expenses WHERE date BETWEEN ? AND ?",
+            arrayOf(start, end)
+        )
         while (cursor.moveToNext()) {
-            expenses.add(
+            list.add(
                 Expense(
                     amount = cursor.getDouble(0),
                     date = cursor.getString(1),
@@ -103,10 +99,47 @@ class ExpenseDatabaseHelper(context: Context) :
                 )
             )
         }
-
         cursor.close()
         db.close()
-        return expenses
+        return list
     }
 
+    fun getTotalSpentPerCategory(startDate: String, endDate: String): Map<String, Double> {
+        val totals = mutableMapOf<String, Double>()
+        val db = readableDatabase
+        val query = """
+            SELECT category, SUM(amount) 
+            FROM expenses 
+            WHERE date BETWEEN ? AND ? 
+            GROUP BY category
+        """
+        val cursor = db.rawQuery(query, arrayOf(startDate, endDate))
+        while (cursor.moveToNext()) {
+            val category = cursor.getString(0)
+            val total = cursor.getDouble(1)
+            totals[category] = total
+        }
+        cursor.close()
+        db.close()
+        return totals
+    }
+
+    fun getTotalForCurrentMonth(): Double {
+        val db = readableDatabase
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val startDate = String.format("%04d-%02d-01", year, month)
+        val endDate = String.format("%04d-%02d-31", year, month)
+
+        val cursor = db.rawQuery(
+            "SELECT SUM(amount) FROM expenses WHERE date BETWEEN ? AND ?",
+            arrayOf(startDate, endDate)
+        )
+
+        val total = if (cursor.moveToFirst()) cursor.getDouble(0) else 0.0
+        cursor.close()
+        db.close()
+        return total
+    }
 }

@@ -83,7 +83,8 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimary"
+        android:backgroundTint="@color/primaryColor"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
+
 </LinearLayout>

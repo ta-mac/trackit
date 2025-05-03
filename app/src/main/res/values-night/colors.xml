@@ -1,0 +1,19 @@
+<resources>
+    <!-- Primary Brand Colors -->
+    <color name="primaryColor">#81C784</color>        <!-- Light Green -->
+    <color name="primaryDark">#388E3C</color>         <!-- Dark Green -->
+    <color name="errorColor">#EF5350</color>          <!-- Soft Red -->
+
+    <!-- Backgrounds and Surfaces -->
+    <color name="background">#121212</color>          <!-- True Black -->
+    <color name="surface">#1E1E1E</color>             <!-- Slightly Lighter Black -->
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#FFFFFF</color>
+    <color name="textSecondary">#B0B0B0</color>
+
+    <color name="buttonGreen">#81C784</color>
+    <color name="buttonDarkGreen">#388E3C</color>
+
+
+</resources>

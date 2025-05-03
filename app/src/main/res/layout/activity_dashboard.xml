@@ -1,46 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center">
+    android:background="@color/background">
 
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome to TrackIT!"
-        android:textSize="24sp"
-        android:layout_marginBottom="32dp" />
-
-    <Button
-        android:id="@+id/btnToCategories"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Add or View Categories"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btnToExpenses"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Add Expense"
-        android:layout_marginBottom="16dp" />
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/trackitlogo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/btnViewByDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Expenses by Date"
-        android:layout_marginTop="16dp" />
+        <!-- Monthly Total -->
+        <TextView
+            android:id="@+id/tvMonthlyTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total this month: R0.00"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:layout_marginBottom="24dp"
+            android:gravity="center" />
 
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/btnAddCategory"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Add Category"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Logout" />
+        <Button
+            android:id="@+id/btnAddExpense"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Add Expense"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnViewByDate"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="View Expenses by Date"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/primaryDark"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnViewCategoryTotals"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Category Totals"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/primaryDark"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnSetBudget"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Set Budget Goals"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white" />
+
+        <!-- Horizontal Dark Mode Toggle -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dark Mode"
+                android:textSize="16sp"
+                android:textColor="@color/textPrimary"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="center_vertical" />
+
+            <Switch
+                android:id="@+id/switchTheme"
+                android:layout_width="56dp"
+                android:layout_height="56dp" />
+        </LinearLayout>
+
+        <!-- Logout -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="LOGOUT"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/errorColor"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>

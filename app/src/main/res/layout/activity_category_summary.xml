@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <EditText
+        android:id="@+id/etStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:hint="Start Date"
+        android:focusable="false" />
+
+    <EditText
+        android:id="@+id/etEndDate"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:hint="End Date"
+        android:focusable="false"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btnViewSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Totals"
+        android:layout_marginTop="16dp" />
+
+    <LinearLayout
+        android:id="@+id/categorySummaryContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

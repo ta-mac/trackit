@@ -1,5 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.TrackIT" parent="Theme.Material3.DayNight.NoActionBar">
 
-    <style name="Theme.Trackit" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Primary theme colors -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">@color/background</item>
+
+        <!-- Text -->
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/errorColor</item>
+    </style>
 </resources>

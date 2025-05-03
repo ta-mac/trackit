@@ -142,4 +142,26 @@ class ExpenseDatabaseHelper(context: Context) :
         db.close()
         return total
     }
+
+    fun getTotalExpensesThisMonth(): Double {
+        val db = this.readableDatabase
+        val calendar = java.util.Calendar.getInstance()
+        calendar.set(java.util.Calendar.DAY_OF_MONTH, 1)
+
+        val startOfMonth = calendar.timeInMillis
+        val cursor = db.rawQuery(
+            "SELECT SUM(amount) FROM expenses WHERE date >= ?",
+            arrayOf(startOfMonth.toString())
+        )
+
+        var total = 0.0
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0)
+        }
+
+        cursor.close()
+        db.close()
+        return total
+    }
+
 }

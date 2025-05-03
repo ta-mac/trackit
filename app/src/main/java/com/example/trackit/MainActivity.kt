@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             val username = etUsername.text.toString()
             val password = etPassword.text.toString()
 
-            if (dbHelper.loginUser(username, password)) {
+            if (dbHelper.insertUser(username, password)) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, DashboardActivity::class.java)
                 startActivity(intent)

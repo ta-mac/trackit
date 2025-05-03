@@ -9,47 +9,74 @@ class DatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "trackit.db"
+        private const val DATABASE_NAME = "TrackIT.db"
         private const val DATABASE_VERSION = 2
-        private const val TABLE_USERS = "users"
-        private const val COLUMN_USERNAME = "username"
-        private const val COLUMN_PASSWORD = "password"
     }
 
+    fun validateUser(username: String, password: String): Boolean {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        val cursor = db.rawQuery(query, arrayOf(username, password))
+
+        val isValid = cursor.count > 0
+        cursor.close()
+        db.close()
+        return isValid
+    }
+
+
     override fun onCreate(db: SQLiteDatabase) {
-        val createUsersTable = """
-            CREATE TABLE $TABLE_USERS (
-                $COLUMN_USERNAME TEXT PRIMARY KEY,
-                $COLUMN_PASSWORD TEXT NOT NULL
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE,
+                password TEXT
             )
-        """.trimIndent()
-        db.execSQL(createUsersTable)
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                description TEXT,
+                amount REAL,
+                date TEXT,
+                time TEXT,
+                category TEXT,
+                photo BLOB
+            )
+            """.trimIndent()
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_USERS")
+        db.execSQL("DROP TABLE IF EXISTS users")
+        db.execSQL("DROP TABLE IF EXISTS categories")
+        db.execSQL("DROP TABLE IF EXISTS expenses")
         onCreate(db)
     }
 
-    fun registerUser(username: String, password: String): Boolean {
+    fun insertUser(username: String, password: String): Boolean {
         val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(COLUMN_USERNAME, username)
-            put(COLUMN_PASSWORD, password)
+        val contentValues = ContentValues().apply {
+            put("username", username)
+            put("password", password)
         }
 
-        val result = db.insert(TABLE_USERS, null, values)
+        val result = db.insert("users", null, contentValues)
         db.close()
         return result != -1L
     }
 
-    fun loginUser(username: String, password: String): Boolean {
-        val db = this.readableDatabase
-        val query = "SELECT * FROM $TABLE_USERS WHERE $COLUMN_USERNAME = ? AND $COLUMN_PASSWORD = ?"
-        val cursor = db.rawQuery(query, arrayOf(username, password))
-        val success = cursor.moveToFirst()
-        cursor.close()
-        db.close()
-        return success
-    }
 }

@@ -22,6 +22,9 @@
         <!-- Registration -->
         <activity android:name=".RegisterActivity" />
 
+        <activity android:name=".ViewByDateActivity" />
+
+
         <!-- Login (Launch activity) -->
         <activity
             android:name=".MainActivity"

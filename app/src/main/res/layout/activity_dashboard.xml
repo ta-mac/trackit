@@ -30,6 +30,14 @@
         android:layout_marginBottom="16dp" />
 
     <Button
+        android:id="@+id/btnViewByDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Expenses by Date"
+        android:layout_marginTop="16dp" />
+
+
+    <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="56dp"

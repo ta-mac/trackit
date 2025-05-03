@@ -25,7 +25,7 @@ class AddExpenseActivity : AppCompatActivity() {
     private lateinit var imgPreview: ImageView
 
     private lateinit var dbHelper: ExpenseDatabaseHelper
-    private lateinit var categoryHelper: CategoryDatabaseHelper
+    private lateinit var categoryHelper: ExpenseDatabaseHelper
     private var imageUri: Uri? = null
 
     companion object {
@@ -48,7 +48,7 @@ class AddExpenseActivity : AppCompatActivity() {
         imgPreview = findViewById(R.id.imgPreview)
 
         dbHelper = ExpenseDatabaseHelper(this)
-        categoryHelper = CategoryDatabaseHelper(this)
+        categoryHelper = ExpenseDatabaseHelper(this)
 
         setupCategorySpinner()
 
@@ -75,8 +75,40 @@ class AddExpenseActivity : AppCompatActivity() {
         }
 
         btnSaveExpense.setOnClickListener {
-            saveExpense()
+            val amountText = etAmount.text.toString()
+            val description = etDescription.text.toString()
+            val date = etDate.text.toString()
+            val startTime = etStartTime.text.toString()
+            val endTime = etEndTime.text.toString()
+            val category = spinnerCategory.selectedItem?.toString() ?: ""
+
+            if (amountText.isEmpty() || date.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || category.isEmpty()) {
+                Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val amount = amountText.toDouble()
+            val fullDescription = "$description\nFrom: $startTime\nTo: $endTime"
+
+            val success = dbHelper.insertExpense(
+                amount,
+                date,
+                fullDescription,
+                category,
+                imageUri?.toString()
+            )
+
+            if (success) {
+                Toast.makeText(this, "Expense saved!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, DashboardActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, "Failed to save expense", Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
     private fun showTimePicker(targetField: EditText) {
@@ -95,38 +127,6 @@ class AddExpenseActivity : AppCompatActivity() {
         }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, categories)
         spinnerCategory.adapter = adapter
-    }
-
-    private fun saveExpense() {
-        val amountText = etAmount.text.toString()
-        val description = etDescription.text.toString()
-        val date = etDate.text.toString()
-        val startTime = etStartTime.text.toString()
-        val endTime = etEndTime.text.toString()
-        val category = spinnerCategory.selectedItem?.toString() ?: ""
-
-        if (amountText.isEmpty() || date.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || category.isEmpty()) {
-            Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val amount = amountText.toDouble()
-        val fullDescription = "$description\nFrom: $startTime\nTo: $endTime"
-
-        val success = dbHelper.insertExpense(
-            amount,
-            date,
-            fullDescription,
-            category,
-            imageUri?.toString()
-        )
-
-        if (success) {
-            Toast.makeText(this, "Expense saved!", Toast.LENGTH_SHORT).show()
-            finish()
-        } else {
-            Toast.makeText(this, "Failed to save expense", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

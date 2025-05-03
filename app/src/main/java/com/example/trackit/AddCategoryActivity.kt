@@ -9,7 +9,8 @@ class AddCategoryActivity : AppCompatActivity() {
     private lateinit var etCategoryName: EditText
     private lateinit var btnAddCategory: Button
     private lateinit var listView: ListView
-    private lateinit var dbHelper: CategoryDatabaseHelper
+    private lateinit var dbHelper: ExpenseDatabaseHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +19,8 @@ class AddCategoryActivity : AppCompatActivity() {
         etCategoryName = findViewById(R.id.etCategoryName)
         btnAddCategory = findViewById(R.id.btnAddCategory)
         listView = findViewById(R.id.categoryListView)
-        dbHelper = CategoryDatabaseHelper(this)
+        dbHelper = ExpenseDatabaseHelper(this)
+
 
         btnAddCategory.setOnClickListener {
             val category = etCategoryName.text.toString()

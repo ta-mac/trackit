@@ -19,6 +19,11 @@ class DashboardActivity : AppCompatActivity() {
 
         btnLogout = findViewById(R.id.btnLogout)
 
+        val btnViewByDate = findViewById<Button>(R.id.btnViewByDate)
+        btnViewByDate.setOnClickListener {
+            startActivity(Intent(this, ViewByDateActivity::class.java))
+        }
+
         btnToCategories.setOnClickListener {
             startActivity(Intent(this, AddCategoryActivity::class.java))
         }

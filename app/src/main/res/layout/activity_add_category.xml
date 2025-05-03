@@ -3,28 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center">
+    android:orientation="vertical">
 
     <EditText
-        android:id="@+id/etNewUsername"
+        android:id="@+id/etCategoryName"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:hint="New Username" />
-
-    <EditText
-        android:id="@+id/etNewPassword"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="New Password"
-        android:inputType="textPassword"
-        android:layout_marginTop="16dp" />
+        android:hint="Enter Category Name" />
 
     <Button
-        android:id="@+id/btnCreateAccount"
+        android:id="@+id/btnAddCategory"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Create Account"
+        android:text="Add Category"
+        android:layout_marginTop="16dp" />
+
+    <ListView
+        android:id="@+id/categoryListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="24dp" />
 </LinearLayout>

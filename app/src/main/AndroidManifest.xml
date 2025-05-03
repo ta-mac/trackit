@@ -1,14 +1,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trackit">
 
+    <!-- Permission for image picking -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:label="TrackIT"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:icon="@mipmap/ic_launcher">
 
+        <!-- Expense Entry -->
+        <activity android:name=".AddExpenseActivity" />
+
+        <!-- Category Creation -->
+        <activity android:name=".AddCategoryActivity" />
+
+        <!-- Dashboard -->
+        <activity android:name=".DashboardActivity" />
+
+        <!-- Registration -->
         <activity android:name=".RegisterActivity" />
 
+        <!-- Login (Launch activity) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
